@@ -1,0 +1,12 @@
+@font-face {
+		font-family: 'montserrat';
+		src: url('../fonts/Montserrat-Medium.ttf');
+}
+@font-face {
+		font-family: 'spartacus';
+		src: url('../fonts/Spartacus.ttf');
+}
+
+.spartacusFont {
+		font-family: 'spartacus', sans-serif;
+}

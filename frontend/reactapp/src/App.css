@@ -1,0 +1,5 @@
+@import url('./assets/css/fonts.module.css');
+
+* {
+		font-family: 'montserrat', sans-serif;
+}
