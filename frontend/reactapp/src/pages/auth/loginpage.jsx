@@ -53,7 +53,7 @@ function LoginPage() {
 				</form>
 
 				<h1>{username}</h1>
-		< />
+		</>
 	);
 }
 
