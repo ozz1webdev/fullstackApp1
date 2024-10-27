@@ -7,7 +7,7 @@ function LogoutPage() {
 		useEffect(() => {
 				localStorage.removeItem('token');
 				localStorage.clear();
-				navigate('/loginpage');
+				navigate('/');
 		},[navigate]);
 
 		return (

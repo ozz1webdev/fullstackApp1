@@ -10,8 +10,6 @@ export const ProfileProvider = ({ children }) => {
 		const [profile, setProfile] = useState(null);
 		const [loading, setLoading] = useState(true);
 		const [error, setError] = useState(null);
-		const token = localStorage.getItem('token');
-		
 
 		useEffect(() => {
 				const token = localStorage.getItem('token');

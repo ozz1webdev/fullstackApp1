@@ -49,7 +49,7 @@ function Test() {
 				</form>
 
 				<h1>{username}</h1>
-		< />
+		</>
 	);
 }
 
