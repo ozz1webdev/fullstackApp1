@@ -53,7 +53,7 @@ class PostUpdate(APIView):
         post = self.get_object(pk)
         if post is None:
             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        print(request.data)
         if 'image' not in request.data:
             serializer = PostSerializer(post, data=request.data, partial=True)
         else:
