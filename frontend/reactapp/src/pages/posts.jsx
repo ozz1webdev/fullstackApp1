@@ -101,7 +101,7 @@ function Posts() {
     };
 
     return (
-        <div>
+        <>
             <h1>Posts</h1>
 
             <div>
@@ -127,7 +127,7 @@ function Posts() {
                     <Modal.Title>Edit Post</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                    {postIdToEdit && <EditPost postId={postIdToEdit} onClose={handleEditClose} />}
+                        {postIdToEdit && <EditPost postId={postIdToEdit} onClose={handleEditClose} />}
                     </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleEditClose}>
@@ -138,17 +138,22 @@ function Posts() {
             </div>
             <div>
                 <h2>All Posts</h2>
-                    <>
-                        <h3>{post.title}</h3>
-                        <p>{post.content}</p>
-                        <img className={styles.postImage} src={post.image} alt={post.title} />
-                        <p>{post.created_at}</p>
-                        <Button variant="link" onClick={() => handleEditShow(1)}>Edit</Button>
-                        <button onClick={() => setEditingPost(post)}>Edit</button>
-                        <button onClick={() => deletePost(post.id)}>Delete</button>
-                    </>
+                
+                        {posts.map((post) => (
+                            <div key={post.id}>
+                                <h3>{post.title}</h3>
+                                <p>{post.content}</p>
+                                <img className={styles.postImage} src={post.image} alt={post.title} />
+                                <p>{post.created_at}</p>
+
+                                <Button variant="primary" onClick={() => handleEditShow(post.id)}>Edit</Button>
+                                <Button variant="danger"  onClick={() => deletePost(post.id)}>Delete</Button>
+                                <hr></hr>
+                            </div>
+                        ))}
+                    
             </div>
-        </div>
+        </>
     );
 }
 

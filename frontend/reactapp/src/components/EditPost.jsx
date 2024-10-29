@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
 const EditPost = ({ postId, onClose }) => {
-  const [post, setPost] = useState({ title: '', content: '', image: null });
+  const [post, setPost] = useState({ title: '', content: '', image: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -13,6 +13,7 @@ const EditPost = ({ postId, onClose }) => {
       try {
         const response = await axios.get(`/posts/${postId}/`);
         setPost(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -40,10 +41,16 @@ const EditPost = ({ postId, onClose }) => {
     const formData = new FormData();
     formData.append('title', post.title);
     formData.append('content', post.content);
-    if (post.image) formData.append('image', post.image);
+    
+    if (post.image) {
+        formData.append('image', post.image);
+    }
+    else {
+        formData.append('image', '');
+    }
 
     try {
-      const response = await axios.put(`/posts/${postId}/`, formData, {
+      const response = await axios.put(`/update/${postId}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Token ${localStorage.getItem('token')}`,
@@ -51,7 +58,7 @@ const EditPost = ({ postId, onClose }) => {
       });
       console.log('Post updated:', response.data);
       alert('Post updated successfully!');
-      onClose(); // Close the modal
+      onClose();
     } catch (error) {
       console.error('Error updating post:', error);
       alert('Failed to update post.');
@@ -85,6 +92,8 @@ const EditPost = ({ postId, onClose }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="image" className="form-label">Image</label>
+          <img src={post.image} alt="Post Image" width="200" height="150" />
+          <br />
           <input
             type="file"
             id="image"

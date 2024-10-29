@@ -9,6 +9,9 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
         read_only_fields = ['author']
+        extra_kwargs = {
+            'image': {'required': False, 'allow_null': True}
+        }
 
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user

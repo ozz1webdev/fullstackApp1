@@ -5,6 +5,7 @@ from .serializers import PostSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsAdminOrReadOnly
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import status
 
 
 class PostList(APIView):
@@ -42,13 +43,27 @@ class PostUpdate(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
 
-    def put(self, request, pk):
-        post = Post.objects.get(pk=pk)
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return None
+
+    def put(self, request, pk, format=None):
+        post = self.get_object(pk)
+        if post is None:
+            return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if 'image' not in request.data:
+            serializer = PostSerializer(post, data=request.data, partial=True)
+        else:
+            serializer = PostSerializer(post, data=request.data)
+
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author=request.user)
             return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostDelete(APIView):
