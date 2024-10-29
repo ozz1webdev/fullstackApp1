@@ -18,7 +18,10 @@ class PostSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
         instance.image = validated_data.get('image', instance.image)
-        instance.likes = validated_data.get('likes', instance.likes)
         instance.author = validated_data.get('author', instance.author)
         instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
         return instance

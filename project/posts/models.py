@@ -8,7 +8,6 @@ class Post(models.Model):
     content = models.TextField()
     image = models.ImageField(upload_to="posts/", blank=True,
                               null=True, default="posts/default.png")
-    likes = models.ManyToManyField(User, related_name="likes", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

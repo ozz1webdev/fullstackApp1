@@ -7,9 +7,9 @@ from .views import (PostList,
 
 
 urlpatterns = [
-    path('', PostList.as_view()),
-    path('<int:pk>/', PostDetail.as_view()),
+    path('posts/', PostList.as_view()),
+    path('posts/<int:pk>/', PostDetail.as_view()),
     path('create/', PostCreate.as_view()),
-    path('/update/<int:pk>', PostUpdate.as_view()),
-    path('/delete/<int:pk>', PostDelete.as_view()),
+    path('update/<int:pk>/', PostUpdate.as_view()),
+    path('delete/<int:pk>/', PostDelete.as_view()),
 ]

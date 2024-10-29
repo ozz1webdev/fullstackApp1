@@ -1,10 +1,10 @@
-from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Post
 from .serializers import PostSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsAdminOrReadOnly
+from rest_framework.authentication import TokenAuthentication
 
 
 class PostList(APIView):
@@ -26,11 +26,12 @@ class PostDetail(APIView):
 
 
 class PostCreate(APIView):
-    authentication_classes = [IsAdminOrReadOnly]
-    permission_classes = [IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminOrReadOnly]
 
     def post(self, request):
-        serializer = PostSerializer(data=request.data)
+        serializer = PostSerializer(data=request.data, context={'request': request})
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -38,8 +39,8 @@ class PostCreate(APIView):
 
 
 class PostUpdate(APIView):
-    authentication_classes = [IsAdminOrReadOnly]
-    permission_classes = [IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminOrReadOnly]
 
     def put(self, request, pk):
         post = Post.objects.get(pk=pk)
@@ -51,8 +52,8 @@ class PostUpdate(APIView):
 
 
 class PostDelete(APIView):
-    authentication_classes = [IsAdminOrReadOnly]
-    permission_classes = [IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminOrReadOnly]
 
     def delete(self, request, pk):
         post = Post.objects.get(pk=pk)
