@@ -10,6 +10,7 @@ import AdminPage from './pages/adminpage';
 import StudentPage from './pages/studentpage';
 import ContactPage from './pages/contactpage';
 import NavigationBar from './components/navigationbar';
+import Posts from './pages/posts';
 import UserProfile from './pages/profile';
 
 
@@ -21,6 +22,7 @@ function App() {
 				<Routes>
 						<Route exact path="/" element={<HomePage />} />
 						<Route path="/homepage" element={<HomePage />} />
+						<Route path="/posts" element={<Posts />} />
 						<Route path="/about" element={<AboutPage />} />
 						<Route path="/test" element={<TestPage />} />
 						<Route path="/login" element={<LoginPage />} />

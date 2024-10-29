@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome,
 		faUser, faMessage,
 		faRightToBracket, faRightFromBracket,
-		faCircleInfo, faGear } from '@fortawesome/free-solid-svg-icons';
+		faCircleInfo, faGear, faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/images/sokrates.png';
 import styles from '../assets/css/navbar.module.css';
 import useUserRole from './useUserRole';
@@ -36,6 +36,7 @@ function NavigationBar () {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/"> <FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
+              <Nav.Link as={Link} to="/posts"><FontAwesomeIcon icon={faBullhorn} /> Posts</Nav.Link>
               {token ? (<> {userrole === 'teacher' && (<><Nav.Link as={Link} to="/teacherpage"><FontAwesomeIcon icon={faUser} /> TeacherPage</Nav.Link></>)} 
                         {userrole === 'admin' && (<> <Nav.Link as={Link} to="/adminpage"><FontAwesomeIcon icon={faUser} /> AdminPage</Nav.Link> </>)}
                         {userrole === 'student' &&  (<><Nav.Link as={Link} to="/studentpage"><FontAwesomeIcon icon={faUser} /> StudentPage</Nav.Link> </>)}
