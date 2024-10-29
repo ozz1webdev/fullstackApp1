@@ -2,20 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, 
-		faUser, faMessage, 
-		faRightToBracket, faRightFromBracket, 
+import { faHome,
+		faUser, faMessage,
+		faRightToBracket, faRightFromBracket,
 		faCircleInfo, faGear } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/images/sokrates.png';
 import styles from '../assets/css/navbar.module.css';
+import useUserRole from './useUserRole';
 
 function NavigationBar () {
 
   const [token, setToken] = useState('');
+  const [userrole, setUserRole] = useState('');
 
+  const role = useUserRole();
+  
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     setToken(storedToken);
+
+    if (role) {
+      setUserRole(role);
+    }    
+
   }, []);
   
   return (
@@ -27,17 +36,20 @@ function NavigationBar () {
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/"> <FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
-              <Nav.Link as={Link} to="/about"><FontAwesomeIcon icon={faCircleInfo} /> About</Nav.Link>
-              <Nav.Link as={Link} to="/contact"><FontAwesomeIcon icon={faMessage} /> Contact</Nav.Link>
-              {token ? (
-                <>
+              {token ? (<> {userrole === 'teacher' && (<><Nav.Link as={Link} to="/teacherpage"><FontAwesomeIcon icon={faUser} /> TeacherPage</Nav.Link></>)} 
+                        {userrole === 'admin' && (<> <Nav.Link as={Link} to="/adminpage"><FontAwesomeIcon icon={faUser} /> AdminPage</Nav.Link> </>)}
+                        {userrole === 'student' &&  (<><Nav.Link as={Link} to="/studentpage"><FontAwesomeIcon icon={faUser} /> StudentPage</Nav.Link> </>)}
                   <Nav.Link as={Link} to="/test"><FontAwesomeIcon icon={faGear} /> TestPage</Nav.Link>
                   <Nav.Link as={Link} to="/profile"><FontAwesomeIcon icon={faUser} /> My Profile</Nav.Link>
-                  <Nav.Link as={Link} to="/logoutpage"><FontAwesomeIcon icon={faRightFromBracket} /> Logout</Nav.Link>  
+                  <Nav.Link as={Link} to="/about"><FontAwesomeIcon icon={faCircleInfo} /> About</Nav.Link>
+                  <Nav.Link as={Link} to="/contact"><FontAwesomeIcon icon={faMessage} /> Contact</Nav.Link>
+                  <Nav.Link as={Link} to="/logout"><FontAwesomeIcon icon={faRightFromBracket} /> Logout</Nav.Link>  
                 </>
               ):(
                 <>
-                  <Nav.Link as={Link} to="/loginpage"><FontAwesomeIcon icon={faRightToBracket} /> Login</Nav.Link>
+                  <Nav.Link as={Link} to="/about"><FontAwesomeIcon icon={faCircleInfo} /> About</Nav.Link>
+                  <Nav.Link as={Link} to="/contact"><FontAwesomeIcon icon={faMessage} /> Contact</Nav.Link>
+                  <Nav.Link as={Link} to="/login"><FontAwesomeIcon icon={faRightToBracket} /> Login</Nav.Link>
                 </>
               )}
             </Nav>
