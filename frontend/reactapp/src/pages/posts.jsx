@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from '../assets/css/posts.module.css';
-import TextEditor from '../components/TextEditor';
 import CreatePost from '../components/CreatePost';
 import EditPost from '../components/EditPost';
+import DateConvert from '../components/dateConvert';
 import { Modal, Button } from 'react-bootstrap';
 
 
 const API_URL = '/posts/';
-const API_URL_CREATE = '/create/';
-const API_URL_UPDATE = '/update/';
 const API_URL_DELETE = '/delete/';
 
 function Posts() {
     const [posts, setPosts] = useState([]);
-    const [newPost, setNewPost] = useState({ title: '', content: '', image: '' });
-    const [editingPost, setEditingPost] = useState(null);
+    const [postDetails, setPostDetails] = useState([]);
     const [modalisOpen, setModalIsOpen] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
     const[postIdToEdit, setPostIdToEdit] = useState(null);
+    const[postIdToDetail, setPostIdToDetail] = useState(null);
+
+
+    const handleDetailClose = () => {
+        setShowDetailModal(false);
+        setPostIdToDetail(null);
+      };
+      
+      const handleDetailShow = (postId) => {
+        setPostIdToDetail(postId);
+        setShowDetailModal(true);
+      };
 
     const handleEditClose = () => {
         setShowEditModal(false);
@@ -44,6 +54,13 @@ function Posts() {
         fetchPosts();
     }, []);
 
+    useEffect(() => {
+        if (showDetailModal) {
+            fetchPostDetails(postIdToDetail);
+        }
+    }, [showDetailModal, postIdToDetail]);
+
+
     const fetchPosts = async () => {
         try {
             const response = await axios.get(API_URL);
@@ -53,37 +70,17 @@ function Posts() {
         }
     };
 
-    // Create a new post
-    const createPost = async () => {
+    const fetchPostDetails = async (postIdToDetail) => {
         try {
-            const response = await axios.post(API_URL_CREATE, newPost, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
+            const response = await axios.get(`/posts/${postIdToDetail}/`, {
+                headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             });
-            setPosts([...posts, response.data]);
-            setNewPost({ title: '', content: '', image: '' });
+            setPostDetails(response.data);
         } catch (error) {
-            console.error("Error creating post:", error);
+            console.error("Error fetching post details:", error);
         }
     };
 
-    // Update an existing post
-    const updatePost = async (postId) => {
-        try {
-            const response = await axios.put(`${API_URL_UPDATE}${postId}/`,{
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                },
-            }, editingPost);
-            setPosts(posts.map((post) => (post.id === postId ? response.data : post)));
-            setEditingPost(null);
-        } catch (error) {
-            console.error("Error updating post:", error);
-        }
-    };
 
     // Delete a post
     const deletePost = async (postId) => {
@@ -107,7 +104,12 @@ function Posts() {
             <div>
                 <Button variant="primary" onClick={openModal}>Create Post</Button>
                 
-                <Modal show={modalisOpen} onHide={closeModal}>
+                <Modal 
+                    show={modalisOpen} 
+                    onHide={closeModal}
+                    centered
+                    size="lg"
+                    >
                     <Modal.Header closeButton>
                     <Modal.Title>Create Post</Modal.Title>
                     </Modal.Header>
@@ -122,7 +124,7 @@ function Posts() {
                 </Modal>
             </div>
             <div>
-                <Modal show={showEditModal} onHide={handleEditClose}>
+                <Modal dialogClassName="styles.custom-modal" show={showEditModal} onHide={handleEditClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Edit Post</Modal.Title>
                     </Modal.Header>
@@ -136,6 +138,33 @@ function Posts() {
                     </Modal.Footer>
                 </Modal>
             </div>
+
+            <div>
+                <Modal show={showDetailModal} onHide={handleDetailClose} size="lg" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Post Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {postDetails ? (
+                            <div>
+                                <h3>{postDetails.title}</h3>
+                                <p>{postDetails.content}</p>
+                                {postDetails.image && (
+                                    <img src={postDetails.image} alt="Post" style={{ maxWidth: '100%' }} />
+                                )}
+                            </div>
+                        ) : (
+                            <p>Loading...</p>
+                        )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleDetailClose}>
+                        Close
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+
             <div>
                 <h2>All Posts</h2>
                 
@@ -144,14 +173,13 @@ function Posts() {
                                 <h3>{post.title}</h3>
                                 <p>{post.content}</p>
                                 <img className={styles.postImage} src={post.image} alt={post.title} />
-                                <p>{post.created_at}</p>
-
+                                <p><DateConvert dateString={post.created_at} /> from <strong>{post.author}</strong></p>
+                                <Button variant="primary" onClick={() => handleDetailShow(post.id)}>Open Post</Button>
                                 <Button variant="primary" onClick={() => handleEditShow(post.id)}>Edit</Button>
                                 <Button variant="danger"  onClick={() => deletePost(post.id)}>Delete</Button>
                                 <hr></hr>
                             </div>
                         ))}
-                    
             </div>
         </>
     );

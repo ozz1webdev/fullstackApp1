@@ -88,6 +88,8 @@ const EditPost = ({ postId, onClose }) => {
             onChange={(value) => setPost({ ...post, content: value })}
             modules={modules}
             placeholder="Write something amazing..."
+            theme="snow"
+            style={{height: '400px', width: '100%', marginBottom: '100px' }}
           />
         </div>
         <div className="mb-3">

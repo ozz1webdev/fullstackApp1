@@ -25,23 +25,33 @@
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width:640;
-    height:480;
-  }
-  
-  .overlay {
+}
+
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.75);
-  }
-  
-  .close-button {
+}
+
+.close-button {
     background: red;
     color: white;
     border: none;
     padding: 10px;
     cursor: pointer;
-  }
+}
+
+.custom-modal .modal-dialog {
+    max-width: 800px; /* Set your desired width */
+    width: 80%; /* This can be a percentage or fixed value */
+    height: auto; /* Set to auto to fit the content */
+    margin: 0 auto;
+}
+
+.custom-modal .modal-content {
+    height: 500px; /* Set your desired height */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
