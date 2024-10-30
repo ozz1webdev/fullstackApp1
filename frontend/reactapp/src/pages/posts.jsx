@@ -22,14 +22,14 @@ function Posts() {
     const [userRole, setUserRole] = useState(null);    
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
-    
+    const [token, setToken] = useState(localStorage.getItem('token'));
 
     const handleDetailClose = () => {
         setShowDetailModal(false);
-        setPostIdToDetail(null);
       };
       
       const handleDetailShow = (postId) => {
+        setPostIdToDetail(postId);
         setPostIdToDetail(postId);
         setShowDetailModal(true);
       };
@@ -37,10 +37,12 @@ function Posts() {
     const handleEditClose = () => {
         setShowEditModal(false);
         setPostIdToEdit(null);
+        setPostIdToDetail(null);
       };
       
       const handleEditShow = (postId) => {
         setPostIdToEdit(postId);
+        setPostIdToDetail(postId);
         setShowEditModal(true);
       };
 
@@ -56,11 +58,13 @@ function Posts() {
     // Fetch posts from the API
     useEffect(() => {
         fetchPosts();
+        setToken(localStorage.getItem('token'));
     }, []);
 
     useEffect(() => {
         if (showDetailModal) {
             fetchPostDetails(postIdToDetail);
+            fetchComments(postIdToDetail);
         }
     }, [showDetailModal, postIdToDetail]);
 
@@ -96,7 +100,18 @@ function Posts() {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             });
             setPostDetails(response.data);
-            setComments(response.data.comments);
+        } catch (error) {
+            console.error("Error fetching post details:", error);
+        }
+    };
+
+    const fetchComments = async (postIdToDetail) => {
+        try {
+            const response = await axios.get(`/comments/${postIdToDetail}/`, {
+                headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+            });
+            setComments(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error("Error fetching post details:", error);
         }
@@ -121,7 +136,6 @@ function Posts() {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
-
         try {
             const response = await axios.post(`/comments/create/${postIdToDetail}/`, { content: newComment }, {
                 headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
@@ -167,7 +181,7 @@ function Posts() {
             <div>
                 {userRole === 'admin' && (<Button variant="primary" onClick={openModal}>Create Post</Button> )}
                 
-                <Modal 
+                <Modal
                     show={modalisOpen} 
                     onHide={closeModal}
                     centered
@@ -221,10 +235,12 @@ function Posts() {
                         )}
                         <hr />
                         <h3>Comments</h3>
+                        <hr />
                         {comments.map((comment) => (
                             <div key={comment.id}>
-                                <p>{comment.content}</p>
-                                <p><DateConvert dateString={comment.created_at} /></p>
+                                <div dangerouslySetInnerHTML={{ __html: comment.content }} />
+                                <span className={styles.commentsMapInfo}><DateConvert dateString={comment.created_at} />from {comment.author}</span>
+                                <hr />
                             </div>
                         ))}
                     </Modal.Body>
@@ -232,7 +248,8 @@ function Posts() {
                         <Button variant="secondary" onClick={handleDetailClose}>
                         Close
                         </Button>
-                        <form onSubmit={handleCommentSubmit}>
+                        { token && (
+                            <form onSubmit={handleCommentSubmit}>
                             <ReactQuill
                                 value={newComment}
                                 onChange={setNewComment}
@@ -243,6 +260,7 @@ function Posts() {
                             />
                             <button type="submit">Add Comment</button>
                         </form>
+                        )}
                     </Modal.Footer>
                 </Modal>
             </div>

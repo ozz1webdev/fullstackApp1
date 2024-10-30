@@ -87,7 +87,7 @@ class CommentsList(APIView):
     authentication_classes = []
 
     def get(self, request, pk):
-        comments = Comments.objects.all(pk=pk)
+        comments = Comments.objects.filter(post=pk)
         serializer = CommentsSerializer(comments, many=True)
         return Response(serializer.data)
 
