@@ -20,10 +20,14 @@ class PostSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
-        instance.image = validated_data.get('image', instance.image)
         instance.author = validated_data.get('author', instance.author)
+        instance.updated_at = validated_data.get('updated_at', instance.updated_at)
+        instance.created_at = validated_data.get('created_at', instance.created_at)
+        if 'image' not in validated_data:
+            validated_data['image'] = instance.image
+        instance.image = validated_data.get('image', instance.image)
         instance.save()
-        return instance
+        return super().update(instance, validated_data)
 
     def delete(self, instance):
         instance.delete()

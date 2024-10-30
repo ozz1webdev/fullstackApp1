@@ -45,13 +45,13 @@
 }
 
 .custom-modal .modal-dialog {
-    max-width: 800px; /* Set your desired width */
-    width: 80%; /* This can be a percentage or fixed value */
-    height: auto; /* Set to auto to fit the content */
+    max-width: 80%;
+    width: 80%; 
+    height: auto;
     margin: 0 auto;
 }
 
 .custom-modal .modal-content {
-    height: 500px; /* Set your desired height */
-    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    height: 500px;
+    overflow-y: auto;
 }

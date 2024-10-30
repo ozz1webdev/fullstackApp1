@@ -4,8 +4,9 @@ import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
 const EditPost = ({ postId, onClose }) => {
-  const [post, setPost] = useState({ title: '', content: '', image: '' });
+  const [post, setPost] = useState({ author: '', title: '', content: '', image: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
     // Fetch the post data for editing
@@ -13,7 +14,6 @@ const EditPost = ({ postId, onClose }) => {
       try {
         const response = await axios.get(`/posts/${postId}/`);
         setPost(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -33,6 +33,9 @@ const EditPost = ({ postId, onClose }) => {
       ['clean'],
     ],
   };
+  const handleNewImage = (e) => {
+    setNewImage(e.target.files[0]); 
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,15 +44,14 @@ const EditPost = ({ postId, onClose }) => {
     const formData = new FormData();
     formData.append('title', post.title);
     formData.append('content', post.content);
-    
-    if (post.image) {
-        formData.append('image', post.image);
-    }
-    else {
-        formData.append('image', '');
+    formData.append('author', post.author);
+
+    if (newImage) {
+        formData.append('image', newImage);
     }
 
     try {
+      
       const response = await axios.put(`/update/${postId}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -69,7 +71,7 @@ const EditPost = ({ postId, onClose }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} >
         <div className="mb-3">
           <label htmlFor="title" className="form-label">Title</label>
           <input
@@ -94,13 +96,13 @@ const EditPost = ({ postId, onClose }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="image" className="form-label">Image</label>
-          <img src={post.image} alt="Post Image" width="200" height="150" />
+          <img src={post.image} alt="Post" width="200" height="150" />
           <br />
           <input
             type="file"
             id="image"
             className="form-control"
-            onChange={(e) => setPost({ ...post, image: e.target.files[0] })}
+            onChange={ handleNewImage }
             accept="image/*"
           />
         </div>

@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function useUserRole() {
+
     const [role, setRole] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-        }
 
         axios.get('/profile/', {
             headers: {

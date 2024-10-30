@@ -18,7 +18,9 @@ function Posts() {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const[postIdToEdit, setPostIdToEdit] = useState(null);
     const[postIdToDetail, setPostIdToDetail] = useState(null);
+    const [userRole, setUserRole] = useState(null);    
 
+    
 
     const handleDetailClose = () => {
         setShowDetailModal(false);
@@ -47,8 +49,8 @@ function Posts() {
   
     const closeModal = () => {
       setModalIsOpen(false);
+      setUserRole('admin');
     };
-
     // Fetch posts from the API
     useEffect(() => {
         fetchPosts();
@@ -60,6 +62,22 @@ function Posts() {
         }
     }, [showDetailModal, postIdToDetail]);
 
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        axios.get('/profile/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${storedToken}`
+            }
+        }).then(response => {
+            setUserRole(response.data.role);
+        })
+        .catch(error => {
+            console.error('Error fetching user role:', error);
+        });
+    
+      },[]);
 
     const fetchPosts = async () => {
         try {
@@ -102,7 +120,7 @@ function Posts() {
             <h1>Posts</h1>
 
             <div>
-                <Button variant="primary" onClick={openModal}>Create Post</Button>
+                {userRole === 'admin' && (<Button variant="primary" onClick={openModal}>Create Post</Button> )}
                 
                 <Modal 
                     show={modalisOpen} 
@@ -124,7 +142,7 @@ function Posts() {
                 </Modal>
             </div>
             <div>
-                <Modal dialogClassName="styles.custom-modal" show={showEditModal} onHide={handleEditClose}>
+                <Modal show={showEditModal} onHide={handleEditClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Edit Post</Modal.Title>
                     </Modal.Header>
@@ -148,7 +166,7 @@ function Posts() {
                         {postDetails ? (
                             <div>
                                 <h3>{postDetails.title}</h3>
-                                <p>{postDetails.content}</p>
+                                <div dangerouslySetInnerHTML={{ __html: postDetails.content }} /> 
                                 {postDetails.image && (
                                     <img src={postDetails.image} alt="Post" style={{ maxWidth: '100%' }} />
                                 )}
@@ -166,19 +184,21 @@ function Posts() {
             </div>
 
             <div>
-                <h2>All Posts</h2>
-                
-                        {posts.map((post) => (
-                            <div key={post.id}>
-                                <h3>{post.title}</h3>
-                                <p>{post.content}</p>
-                                <img className={styles.postImage} src={post.image} alt={post.title} />
-                                <p><DateConvert dateString={post.created_at} /> from <strong>{post.author}</strong></p>
-                                <Button variant="primary" onClick={() => handleDetailShow(post.id)}>Open Post</Button>
-                                <Button variant="primary" onClick={() => handleEditShow(post.id)}>Edit</Button>
-                                <Button variant="danger"  onClick={() => deletePost(post.id)}>Delete</Button>
-                                <hr></hr>
-                            </div>
+                {posts.map((post) => (
+						<div key={post.id}>
+								<h3 onClick={() => handleDetailShow(post.id)}>{post.title}</h3>
+								<img className={styles.postImage} src={post.image} alt={post.title} onClick={() => handleDetailShow(post.id)}/>
+								<p><DateConvert dateString={post.created_at} /> from <strong>{post.author}</strong></p>
+								<Button variant="primary" onClick={() => handleDetailShow(post.id)}>Open Post</Button>
+                                
+								{ userRole === 'admin' && ( 
+                                <>
+                                    <Button variant="primary" onClick={() => handleEditShow(post.id)}>Edit</Button>
+								    <Button variant="danger"  onClick={() => deletePost(post.id)}>Delete</Button>
+                                </>
+                                )}
+								<hr></hr>
+                        </div>
                         ))}
             </div>
         </>

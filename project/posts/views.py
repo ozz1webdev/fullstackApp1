@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsAdminOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class PostList(APIView):
@@ -19,6 +20,7 @@ class PostList(APIView):
 
 class PostDetail(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def get(self, request, pk):
         post = Post.objects.get(pk=pk)
@@ -42,6 +44,7 @@ class PostCreate(APIView):
 class PostUpdate(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_object(self, pk):
         try:
@@ -51,17 +54,16 @@ class PostUpdate(APIView):
 
     def put(self, request, pk, format=None):
         post = self.get_object(pk)
+        print(request.data)
         if post is None:
             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
-        print(request.data)
-        if 'image' not in request.data:
-            serializer = PostSerializer(post, data=request.data, partial=True)
-        else:
-            serializer = PostSerializer(post, data=request.data)
+        if post.author != request.user and not request.user.is_staff:
+            return Response({"detail": "Not authorized to edit this post."}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = PostSerializer(post, data=request.data)
+        serializer = PostSerializer(post, data=request.data, partial=True, context={'request': request})
+
         if serializer.is_valid():
-            serializer.save(author=request.user)
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -72,5 +74,9 @@ class PostDelete(APIView):
 
     def delete(self, request, pk):
         post = Post.objects.get(pk=pk)
+
+        if post.author != request.user and not request.user.is_staff:
+            return Response({"detail": "Not authorized to delete this post."}, status=status.HTTP_403_FORBIDDEN)
+        
         post.delete()
         return Response(status=204)
