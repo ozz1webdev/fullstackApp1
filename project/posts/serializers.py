@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post
+from .models import Post, Comments
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -28,6 +28,24 @@ class PostSerializer(serializers.ModelSerializer):
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         return super().update(instance, validated_data)
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+    post = serializers.ReadOnlyField(source='post.title')
+
+    class Meta:
+        model = Comments
+        fields = '__all__'
+        read_only_fields = ['author', 'post']
+
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        return Comments.objects.create(**validated_data)
 
     def delete(self, instance):
         instance.delete()

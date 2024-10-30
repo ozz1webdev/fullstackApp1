@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Post
-from .serializers import PostSerializer
+from .models import Post, Comments
+from .serializers import PostSerializer, CommentsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .permissions import IsAdminOrReadOnly
 from rest_framework.authentication import TokenAuthentication
@@ -77,6 +77,33 @@ class PostDelete(APIView):
 
         if post.author != request.user and not request.user.is_staff:
             return Response({"detail": "Not authorized to delete this post."}, status=status.HTTP_403_FORBIDDEN)
-        
+
         post.delete()
         return Response(status=204)
+
+
+class CommentsList(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get(self, request, pk):
+        comments = Comments.objects.all(pk=pk)
+        serializer = CommentsSerializer(comments, many=True)
+        return Response(serializer.data)
+
+
+class CommentsCreate(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Response({"error": "Post not found"}, status=404)
+
+        serializer = CommentsSerializer(data=request.data, context={'request': request, 'post': post})
+        if serializer.is_valid():
+            serializer.save(author=request.user, post=post)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

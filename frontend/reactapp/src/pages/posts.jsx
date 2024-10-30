@@ -5,7 +5,8 @@ import CreatePost from '../components/CreatePost';
 import EditPost from '../components/EditPost';
 import DateConvert from '../components/dateConvert';
 import { Modal, Button } from 'react-bootstrap';
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const API_URL = '/posts/';
 const API_URL_DELETE = '/delete/';
@@ -19,7 +20,8 @@ function Posts() {
     const[postIdToEdit, setPostIdToEdit] = useState(null);
     const[postIdToDetail, setPostIdToDetail] = useState(null);
     const [userRole, setUserRole] = useState(null);    
-
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
     
 
     const handleDetailClose = () => {
@@ -94,6 +96,7 @@ function Posts() {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             });
             setPostDetails(response.data);
+            setComments(response.data.comments);
         } catch (error) {
             console.error("Error fetching post details:", error);
         }
@@ -114,6 +117,48 @@ function Posts() {
             console.error("Error deleting post:", error);
         }
     };
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+
+        try {
+            const response = await axios.post(`/comments/create/${postIdToDetail}/`, { content: newComment }, {
+                headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+            });
+            setComments([...comments, response.data]);
+            setNewComment("");
+        } catch (err) {
+            console.error("Error adding comment");
+        }
+    };
+
+    const modules = {
+        toolbar: [
+          [{ header: '1' }, { header: '2' }, { font: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['bold', 'italic', 'underline', 'strike'],
+          ['link', 'image'],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }],
+          ['clean'],
+        ],
+      };
+
+      const formats = [
+        'header',
+        'font',
+        'list',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'align',
+        'color',
+        'background',
+        'link',
+        'image',
+      ]    
 
     return (
         <>
@@ -174,11 +219,30 @@ function Posts() {
                         ) : (
                             <p>Loading...</p>
                         )}
+                        <hr />
+                        <h3>Comments</h3>
+                        {comments.map((comment) => (
+                            <div key={comment.id}>
+                                <p>{comment.content}</p>
+                                <p><DateConvert dateString={comment.created_at} /></p>
+                            </div>
+                        ))}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleDetailClose}>
                         Close
-                    </Button>
+                        </Button>
+                        <form onSubmit={handleCommentSubmit}>
+                            <ReactQuill
+                                value={newComment}
+                                onChange={setNewComment}
+                                modules={modules}
+                                formats={formats}
+                                theme="snow"
+                                placeholder="Write something amazing..."
+                            />
+                            <button type="submit">Add Comment</button>
+                        </form>
                     </Modal.Footer>
                 </Modal>
             </div>
