@@ -128,15 +128,15 @@ After Success Login, you will be redirected to the Home page. The Menu will be d
 ## Menu Items
 
 * Role guest
-<img src="./Readme/main-menu.png" alt="menu" width="800" height="600"/>
+<img src="./Readme/main-menu.png" alt="menu" />
 
 * Role admin
-<img src="./Readme/admin-menu.png" alt="menu" width="800" height="600"/>
+<img src="./Readme/admin-menu.png" alt="menu" />
 
 * Role teacher
-<img src="./Readme/teacher-menu.png" alt="menu" width="800" height="600"/>
+<img src="./Readme/teacher-menu.png" alt="menu" />
 
 * Role student
-<img src="./Readme/student-menu.png" alt="menu" width="800" height="600"/>
+<img src="./Readme/student-menu.png" alt="menu" />
 
 
