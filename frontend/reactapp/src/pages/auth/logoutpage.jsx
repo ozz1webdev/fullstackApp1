@@ -9,6 +9,7 @@ function LogoutPage() {
 
         const timer = setTimeout(() => {
             navigate('/');
+            window.location.reload(false);
         }, 1000);
         return () => clearTimeout(timer);
     }, [navigate]);

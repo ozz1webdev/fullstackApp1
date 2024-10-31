@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome,
 		faUser, faMessage,
 		faRightToBracket, faRightFromBracket,
-		faCircleInfo, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+		faCircleInfo, faBullhorn, faSquarePollVertical } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/images/sokrates.png';
 import styles from '../assets/css/navbar.module.css';
 import axios from 'axios';
@@ -44,6 +44,7 @@ function NavigationBar () {
 						<Nav className="ms-auto">
 								<Nav.Link  onClick={handleReload} as={Link} to="/"> <FontAwesomeIcon icon={faHome} /> Home</Nav.Link>
 								<Nav.Link  onClick={handleReload} as={Link} to="/posts"><FontAwesomeIcon icon={faBullhorn} /> Posts</Nav.Link>
+								<Nav.Link  onClick={handleReload} as={Link} to="/votes"><FontAwesomeIcon icon={faSquarePollVertical} /> Votes</Nav.Link>
 								{token ? ( 
 								<> 
 									{userRole === 'teacher' && (

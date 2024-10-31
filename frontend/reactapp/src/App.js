@@ -11,6 +11,7 @@ import StudentPage from './pages/studentpage';
 import ContactPage from './pages/contactpage';
 import NavigationBar from './components/navigationbar';
 import Posts from './pages/posts';
+import VotesPage from './pages/votes';
 import UserProfile from './pages/profile';
 
 
@@ -33,6 +34,7 @@ function App() {
 						<Route path="/adminpage" element={<AdminPage />} />
 						<Route path="/studentpage" element={<StudentPage />} />
 						<Route path="/contact" element={<ContactPage />} />
+						<Route path="/votes" element={<VotesPage />} />
 						<Route path="/*" element={<HomePage />} />
 				</Routes>
 		</Router>

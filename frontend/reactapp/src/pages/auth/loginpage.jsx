@@ -28,6 +28,7 @@ function LoginPage() {
 						if(response.status === 200) {
 								localStorage.setItem('token', response.data.token);
 								navigate("/homepage");
+								window.location.reload(false);
 						}
 						else {
 								console.log(response.status);
