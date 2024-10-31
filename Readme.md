@@ -32,6 +32,8 @@
     - [Heroku Configuration](#heroku-configuration-1)
   - [Credits](#credits)
 
+---
+
 ## Backend
 
 ### Introduction
