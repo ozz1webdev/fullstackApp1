@@ -18,6 +18,9 @@
     - [Packages](#packages)
   - [Deployment](#deployment)
     - [Heroku Configuration](#heroku-configuration)
+- [Sokrates Frontend](#sokrates-frontend)
+  - [Introduction](#introduction-1)
+  - [Menu Items](#menu-items)
 
 ## Backend
 
@@ -100,3 +103,40 @@ Sokrates is a school managment system. In this stage we will focus on backend.
    - `SECRET_KEY`: A secret key from [Djecrety](https://djecrety.ir/).
    - `DISABLE_COLLECTSTATIC`: `1`.
    - `CLOUDINARY_URL`: Your Cloudinary API environment variable if used.
+
+
+# Sokrates Frontend
+
+
+## Introduction
+
+After visiting the frontend site, you will be directed to the Home page. Please login with your username and password.
+The user cannot Register an account. All Users get for a first time use a card from the school with the login information.
+After logging in you can create your Profile.(Future Feature).
+
+All users get a role to determine what they can do.Only the admin can create, edit or delete posts all other Users can only view posts
+and only the students and techers can leave comments.
+
+The roles are : 
+- Admin
+- Teacher
+- Student
+- Guest
+
+After Success Login, you will be redirected to the Home page. The Menu will be displayed based on your role.
+
+## Menu Items
+
+* Role guest
+<img src="./Readme/main-menu.png" alt="menu" width="800" height="600"/>
+
+* Role admin
+<img src="./Readme/admin-menu.png" alt="menu" width="800" height="600"/>
+
+* Role teacher
+<img src="./Readme/teacher-menu.png" alt="menu" width="800" height="600"/>
+
+* Role student
+<img src="./Readme/student-menu.png" alt="menu" width="800" height="600"/>
+
+
