@@ -20,9 +20,17 @@
     - [Heroku Configuration](#heroku-configuration)
 - [Sokrates Frontend](#sokrates-frontend)
   - [Introduction](#introduction-1)
+  - [User Experience](#user-experience)
   - [Menu Items](#menu-items)
   - [Posts](#posts)
+    - [Posts Features](#posts-features)
   - [User Profile](#user-profile)
+  - [Future Features](#future-features)
+  - [Page Styling](#page-styling)
+  - [Technologies used](#technologies-used)
+  - [Deployment](#deployment-1)
+    - [Heroku Configuration](#heroku-configuration-1)
+  - [Credits](#credits)
 
 ## Backend
 
@@ -127,6 +135,17 @@ The roles are :
 
 After Success Login, you will be redirected to the Home page. The Menu will be displayed based on your role.
 
+---
+
+## User Experience
+
+* App is responsive
+* Admin create Posts: Only the user with the role Admin can Create Edit and Delete a post.
+* Registired Users can leave comments on posts.
+* Guest can only view posts.
+
+---
+
 ## Menu Items
 
 * Role guest
@@ -141,7 +160,7 @@ After Success Login, you will be redirected to the Home page. The Menu will be d
 * Role student
 <img src="./Readme/student-menu.png" alt="menu" />
 
-
+---
 
 ## Posts
 
@@ -152,14 +171,84 @@ After Success Login, you will be redirected to the Home page. The Menu will be d
 <img src="./Readme/editPost.png" alt="post" />
 
 * Post Open and Comments
-<img src="./Readme/postDetail.png" alt="post" />
+<img src="./Readme/postDetails.png" alt="post" />
 
 * Admin Actions
 <img src="./Readme/postCardAdmin.png" alt="post" />
 
+---
+
+### Posts Features
+
+For text content is used the WYSIWYG editor (Quill).
+Expect the Text input you can add images as well on the editor for Content and Comments
+as well you can format the text with the editor.
+
+---
 
 ## User Profile
 
 * User Profile
 <img src="./Readme/profile.png" alt="profile" />
 
+---
+
+## Future Features
+
+* Vote system
+* Messages system
+* Classroom system
+* Notification system
+
+---
+
+## Page Styling
+
+Currently the page is styled with little Bootstrap. 
+Styling is future work.
+
+---
+
+## Technologies used
+
+* React
+* React Bootstrap
+* Axios
+* React Quill
+* React Router Dom
+* FontAwesome
+
+---
+
+## Deployment
+
+### Heroku Configuration
+
+1. **Create a Heroku Account**: Sign up for [Heroku](https://signup.heroku.com/) to manage cloud-based applications.
+
+2. **Prepare Your Application**:
+   - Push your code to the Repositoryon GitHub.
+   - Ensure all necessary changes are committed for deployment.
+
+3. **Create a New Heroku Application**:
+   - Log in to Heroku and create a new app.
+   - Choose a unique name and select a region.
+
+4. **Set Environment Variables**:
+   - Navigate to your app's settings on Heroku.
+   - Add required environment variables under "Config Vars" to secure sensitive data.
+
+5. **Deploy Your Application**:
+   - Go to the "Deploy" tab in your app's Heroku dashboard.
+   - Connect to your GitHub repository and choose the branch to deploy.
+   - Click "Deploy Branch" to start the deployment process.
+
+6. **Verify Deployment**:
+   - Once deployed, Heroku provides a URL for your live application.
+   - Open this URL in your browser to ensure the application is running correctly.
+
+---
+
+## Credits
+
+All Images were taken from google image search for testing purposes only and are not owned by me or Sokrates.
