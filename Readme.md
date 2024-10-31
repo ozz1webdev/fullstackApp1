@@ -21,6 +21,8 @@
 - [Sokrates Frontend](#sokrates-frontend)
   - [Introduction](#introduction-1)
   - [Menu Items](#menu-items)
+  - [Posts](#posts)
+  - [User Profile](#user-profile)
 
 ## Backend
 
@@ -139,4 +141,25 @@ After Success Login, you will be redirected to the Home page. The Menu will be d
 * Role student
 <img src="./Readme/student-menu.png" alt="menu" />
 
+
+
+## Posts
+
+* Create Post
+<img src="./Readme/createPost.png" alt="post" />
+
+* Edit Post
+<img src="./Readme/editPost.png" alt="post" />
+
+* Post Open and Comments
+<img src="./Readme/postDetail.png" alt="post" />
+
+* Admin Actions
+<img src="./Readme/postCardAdmin.png" alt="post" />
+
+
+## User Profile
+
+* User Profile
+<img src="./Readme/profile.png" alt="profile" />
 
