@@ -6,9 +6,25 @@
 
 [Visit frontend site here](https://code5.ddns.net)
 
+## Table of Contents
 
+- [Sokrates Backend](#sokrates-backend)
+  - [Links](#links)
+  - [Table of Contents](#table-of-contents)
+  - [Backend](#backend)
+    - [Introduction](#introduction)
+    - [Database diagram](#database-diagram)
+    - [Relationships](#relationships)
+    - [Packages](#packages)
+  - [Deployment](#deployment)
+    - [Heroku Configuration](#heroku-configuration)
 
 ## Backend
+
+### Introduction
+
+Sokrates is a school managment system. In this stage we will focus on backend.
+
 
 ### Database diagram
 
